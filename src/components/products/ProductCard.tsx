@@ -42,8 +42,8 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
-      <div className="p-4 pb-0">
+    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden h-full flex flex-col">
+      <div className="p-4 pb-0 flex-grow">
         <div className="flex justify-between items-start mb-3">
           <div className="flex items-center space-x-2">
             <div className="p-2 bg-blue-50 rounded-lg">

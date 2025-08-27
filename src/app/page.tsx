@@ -5,8 +5,12 @@ import { Header } from "@/components/layout/Header";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { FilterBar } from "@/components/products/FilterBar";
 import { StatsPanel } from "@/components/products/StatsPanel";
+import { CategoryChart } from "@/components/charts/CategoryChart";
+import { ProductForm } from "@/components/products/ProductForm";
+import { DeleteConfirmation } from "@/components/products/DeleteConfirmation";
 import { useProducts } from "@/hooks/useProducts";
 import { Product } from "@/lib/types";
+import { toast } from "sonner";
 
 export default function HomePage() {
   const {
@@ -23,25 +27,44 @@ export default function HomePage() {
 
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
-    // TODO: Abrir modal de edición
-    console.log("Editar producto:", product);
   };
 
   const handleCreate = () => {
     setShowCreateForm(true);
-    // TODO: Abrir modal de creación
-    console.log("Crear nuevo producto");
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteRequest = (product: Product) => {
+    setDeletingProduct(product);
+  };
+
+  const handleDeleteConfirm = async (id: string) => {
     try {
       await deleteProduct(id);
+      toast.success("Producto eliminado exitosamente");
+      setDeletingProduct(null);
     } catch (error) {
-      console.error("Error al eliminar:", error);
-      alert("Error al eliminar el producto");
+      toast.error("Error al eliminar el producto");
+      throw error;
+    }
+  };
+
+  const handleFormSuccess = () => {
+    refreshData();
+    toast.success(
+      editingProduct
+        ? "Producto actualizado exitosamente"
+        : "Producto creado exitosamente"
+    );
+  };
+
+  const handleDeleteFromGrid = async (id: string) => {
+    const product = products.find((p) => p.id === id);
+    if (product) {
+      handleDeleteRequest(product);
     }
   };
 
@@ -55,6 +78,10 @@ export default function HomePage() {
           </h2>
           <p className="text-gray-600 mb-4">
             No se pudo conectar con el servidor backend.
+          </p>
+          <p className="text-sm text-gray-500 mb-4">
+            Asegúrate de que el servidor NestJS esté corriendo en
+            http://localhost:3000
           </p>
           <button
             onClick={refreshData}
@@ -70,14 +97,22 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <Header onCreateClick={handleCreate} />
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <StatsPanel statistics={statistics} loading={loading} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <CategoryChart statistics={statistics} type="doughnut" />
+          <CategoryChart statistics={statistics} type="bar" />
+        </div>
+
         <FilterBar
           categories={categories}
           filters={filters}
           onFiltersChange={updateFilters}
           totalResults={products.length}
         />
+
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900">
@@ -95,51 +130,37 @@ export default function HomePage() {
             products={products}
             loading={loading}
             onEdit={handleEdit}
-            onDelete={handleDelete}
+            onDelete={handleDeleteFromGrid}
           />
         </div>
 
         {!loading && (
           <div className="text-center py-4">
             <p className="text-sm text-gray-500">
-              🟢 Conectado • Última actualización:{" "}
+              🟢 Conectado al backend NestJS • Última actualización:{" "}
               {new Date().toLocaleTimeString()}
             </p>
           </div>
         )}
       </main>
 
-      {showCreateForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Crear Producto</h3>
-            <p className="text-gray-600">Modal de creación</p>
-            <button
-              onClick={() => setShowCreateForm(false)}
-              className="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
+      <ProductForm
+        product={editingProduct}
+        categories={categories}
+        isOpen={showCreateForm || !!editingProduct}
+        onClose={() => {
+          setShowCreateForm(false);
+          setEditingProduct(null);
+        }}
+        onSuccess={handleFormSuccess}
+      />
 
-      {editingProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">
-              Editar: {editingProduct.name}
-            </h3>
-            <p className="text-gray-600">Modal de edición</p>
-            <button
-              onClick={() => setEditingProduct(null)}
-              className="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
+      <DeleteConfirmation
+        product={deletingProduct}
+        isOpen={!!deletingProduct}
+        onClose={() => setDeletingProduct(null)}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 }

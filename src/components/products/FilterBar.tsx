@@ -12,6 +12,7 @@ interface FilterBarProps {
   categories: string[];
   filters: ProductFilters;
   onFiltersChange: (filters: ProductFilters) => void;
+  onClearFilters: () => void;
   totalResults: number;
 }
 
@@ -19,6 +20,7 @@ export function FilterBar({
   categories,
   filters,
   onFiltersChange,
+  onClearFilters,
   totalResults,
 }: FilterBarProps) {
   const [localSearch, setLocalSearch] = useState(filters.search || "");
@@ -61,7 +63,7 @@ export function FilterBar({
 
   const clearFilters = () => {
     setLocalSearch("");
-    onFiltersChange({});
+    onClearFilters();
   };
 
   const hasActiveFilters = !!(

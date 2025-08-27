@@ -64,6 +64,11 @@ export function useProducts() {
     }
   };
 
+  const clearFilters = useCallback(() => {
+    setCurrentPage(1);
+    setFilters({});
+  }, []);
+
   const changeItemsPerPage = (newLimit: number) => {
     setCurrentPage(1);
     setItemsPerPage(newLimit);
@@ -92,12 +97,14 @@ export function useProducts() {
     updateFilters,
     deleteProduct,
     refreshData,
+    clearFilters,
     pagination: {
       currentPage,
       totalPages,
       totalProducts,
       itemsPerPage,
       goToPage,
+
       changeItemsPerPage,
     },
   };

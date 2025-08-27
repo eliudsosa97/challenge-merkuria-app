@@ -26,6 +26,7 @@ export default function HomePage() {
     deleteProduct,
     refreshData,
     pagination,
+    clearFilters,
   } = useProducts();
 
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -100,7 +101,8 @@ export default function HomePage() {
           categories={categories}
           filters={filters}
           onFiltersChange={updateFilters}
-          totalResults={products.length}
+          onClearFilters={clearFilters}
+          totalResults={pagination.totalProducts}
         />
         <StatsPanel statistics={statistics} loading={loading} />
 

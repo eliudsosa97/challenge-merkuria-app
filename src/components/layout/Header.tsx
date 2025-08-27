@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react"; // 1. Importa el ícono
+import { Plus } from "lucide-react";
 
 interface HeaderProps {
   onCreateClick: () => void;
@@ -20,7 +20,6 @@ export function Header({ onCreateClick }: HeaderProps) {
             </div>
           </div>
 
-          {/* 2. Botón actualizado para ser responsivo */}
           <button
             onClick={onCreateClick}
             className="bg-green-700 hover:bg-green-800 text-white px-3 py-2 sm:px-4 rounded-lg font-medium transition-colors cursor-pointer flex items-center"

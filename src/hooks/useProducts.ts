@@ -59,8 +59,11 @@ export function useProducts() {
 
   const updateFilters = useCallback(
     (newFilters: ProductFilters) => {
-      setFilters(newFilters);
-      fetchProducts(newFilters);
+      setFilters((prevFilters) => {
+        const updatedFilters = { ...prevFilters, ...newFilters };
+        fetchProducts(updatedFilters);
+        return updatedFilters;
+      });
     },
     [fetchProducts]
   );

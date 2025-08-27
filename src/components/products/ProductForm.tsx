@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X, Save, Package } from "lucide-react";
@@ -31,13 +31,6 @@ export function ProductForm({
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: product?.name || "",
-      category: product?.category || "",
-      price: product?.price || 0,
-      rating: product?.rating,
-      stock: product?.stock || 0,
-    },
   });
 
   const {
@@ -47,6 +40,20 @@ export function ProductForm({
     reset,
     setValue,
   } = form;
+
+  useEffect(() => {
+    if (product) {
+      reset(product);
+    } else {
+      reset({
+        name: "",
+        category: "",
+        price: 0,
+        rating: undefined,
+        stock: 0,
+      });
+    }
+  }, [product, reset]);
 
   const categoryOptions = [
     { value: "", label: "Selecciona una categoría" },

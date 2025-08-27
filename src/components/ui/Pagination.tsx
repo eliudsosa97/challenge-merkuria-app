@@ -28,7 +28,7 @@ export function Pagination({
         disabled={currentPage === 1}
       >
         <ChevronLeft className="w-4 h-4 mr-2" />
-        Anterior
+        <span className="hidden sm:block">Anterior</span>
       </Button>
 
       <span className="text-sm text-gray-700">
@@ -41,7 +41,7 @@ export function Pagination({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        Siguiente
+        <span className="hidden sm:block">Siguiente</span>
         <ChevronRight className="w-4 h-4 ml-2" />
       </Button>
     </div>

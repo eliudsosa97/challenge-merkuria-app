@@ -128,7 +128,7 @@ export default function HomePage() {
                 <option value={20}>20</option>
                 <option value={50}>50</option>
               </select>
-              <span>por página</span>
+              <span className="hidden sm:block">por página</span>
             </div>
           </div>
 

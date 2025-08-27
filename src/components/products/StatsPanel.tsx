@@ -113,12 +113,12 @@ export function StatsPanel({ statistics, loading }: StatsPanelProps) {
           Distribución por Categorías
         </h3>
         <div className="space-y-3">
-          {...statistics.byCategory
+          {[...statistics.byCategory]
             .sort((a, b) => b.count - a.count)
             .map((category, index) => (
               <div
                 key={category.category}
-                className="flex items-center justify-between"
+                className="flex items-center justify-between gap-4"
               >
                 <div className="flex items-center space-x-3">
                   <div
@@ -140,8 +140,8 @@ export function StatsPanel({ statistics, loading }: StatsPanelProps) {
                     {category.category}
                   </span>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2 w-24">
+                <div className="flex items-center space-x-2 sm:space-x-4 justify-end">
+                  <div className="hidden sm:block flex-1 bg-gray-200 rounded-full h-2 w-24">
                     <div
                       className={`h-2 rounded-full ${
                         index === 0

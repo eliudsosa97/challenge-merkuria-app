@@ -48,9 +48,9 @@ export function ProductForm({
       reset({
         name: "",
         category: "",
-        price: 0,
+        price: undefined,
         rating: undefined,
-        stock: 0,
+        stock: undefined,
       });
     }
   }, [product, reset]);

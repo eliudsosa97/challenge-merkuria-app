@@ -4,12 +4,15 @@ import {
   ProductFilters,
   ProductStats,
   CreateProductDto,
+  PaginatedProducts,
 } from "@/lib/types";
 
 export class ProductsService {
   private static readonly BASE_PATH = "/products";
 
-  static async getProducts(filters?: ProductFilters): Promise<Product[]> {
+  static async getProducts(
+    filters?: ProductFilters
+  ): Promise<PaginatedProducts> {
     const params = new URLSearchParams();
 
     if (filters?.category) params.append("category", filters.category);
@@ -20,6 +23,9 @@ export class ProductsService {
     if (filters?.search) params.append("search", filters.search);
     if (filters?.sortBy) params.append("sortBy", filters.sortBy);
     if (filters?.sortOrder) params.append("sortOrder", filters.sortOrder);
+
+    if (filters?.page) params.append("page", filters.page.toString());
+    if (filters?.limit) params.append("limit", filters.limit.toString());
 
     const response = await api.get(`${this.BASE_PATH}?${params}`);
     return response.data;

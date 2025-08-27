@@ -16,6 +16,13 @@ export interface ProductFilters {
   search?: string;
   sortBy?: "name" | "price";
   sortOrder?: "ASC" | "DESC";
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedProducts {
+  data: Product[];
+  total: number;
 }
 
 export interface ProductStats {

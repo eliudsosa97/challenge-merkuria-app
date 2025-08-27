@@ -8,6 +8,8 @@ import { StatsPanel } from "@/components/products/StatsPanel";
 import { CategoryChart } from "@/components/charts/CategoryChart";
 import { ProductForm } from "@/components/products/ProductForm";
 import { DeleteConfirmation } from "@/components/products/DeleteConfirmation";
+import { Pagination } from "@/components/ui/Pagination";
+
 import { useProducts } from "@/hooks/useProducts";
 import { Product } from "@/lib/types";
 import { toast } from "sonner";
@@ -23,6 +25,7 @@ export default function HomePage() {
     updateFilters,
     deleteProduct,
     refreshData,
+    pagination,
   } = useProducts();
 
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -112,11 +115,21 @@ export default function HomePage() {
               Productos Disponibles
             </h2>
 
-            {!loading && products.length > 0 && (
-              <div className="text-sm text-gray-500">
-                Mostrando {products.length} productos
-              </div>
-            )}
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <span>Mostrar:</span>
+              <select
+                value={pagination.itemsPerPage}
+                onChange={(e) =>
+                  pagination.changeItemsPerPage(Number(e.target.value))
+                }
+                className="border border-gray-300 rounded-md px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+              <span>por página</span>
+            </div>
           </div>
 
           <ProductGrid
@@ -124,6 +137,12 @@ export default function HomePage() {
             loading={loading}
             onEdit={handleEdit}
             onDelete={handleDeleteRequest}
+          />
+
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={pagination.goToPage}
           />
         </div>
 

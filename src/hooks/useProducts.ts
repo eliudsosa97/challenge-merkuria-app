@@ -11,16 +11,30 @@ export function useProducts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<ProductFilters>({});
+  const [totalProducts, setTotalProducts] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const totalPages = Math.ceil(totalProducts / itemsPerPage);
 
-  const fetchProducts = useCallback(
-    async (currentFilters: ProductFilters = {}) => {
+  const fetchData = useCallback(
+    async (currentFilters: ProductFilters, page: number, limit: number) => {
       try {
         setLoading(true);
         setError(null);
-        const data = await ProductsService.getProducts(currentFilters);
-        setProducts(data);
+
+        const query = { ...currentFilters, page, limit };
+
+        // Pedimos productos y estadísticas en paralelo para más velocidad
+        const [productsResponse, statsResponse] = await Promise.all([
+          ProductsService.getProducts(query),
+          ProductsService.getStatistics(query),
+        ]);
+
+        setProducts(productsResponse.data);
+        setTotalProducts(productsResponse.total);
+        setStatistics(statsResponse);
       } catch (err) {
-        setError("Error al cargar los productos");
+        setError("Error al cargar los datos");
         console.error(err);
       } finally {
         setLoading(false);
@@ -29,61 +43,44 @@ export function useProducts() {
     []
   );
 
-  const fetchCategories = useCallback(async () => {
-    try {
-      const data = await ProductsService.getCategories();
-      setCategories(data);
-    } catch (err) {
-      console.error("Error al cargar categorías:", err);
-    }
+  useEffect(() => {
+    fetchData(filters, currentPage, itemsPerPage);
+  }, [filters, currentPage, itemsPerPage, fetchData]);
+
+  useEffect(() => {
+    ProductsService.getCategories()
+      .then(setCategories)
+      .catch((err) => console.error(err));
   }, []);
 
-  const fetchStatistics = useCallback(
-    async (currentFilters: ProductFilters = {}) => {
-      try {
-        const data = await ProductsService.getStatistics(currentFilters);
-        setStatistics(data);
-      } catch (err) {
-        console.error("Error al cargar estadísticas:", err);
-      }
-    },
-    []
-  );
+  const updateFilters = useCallback((newFilters: Partial<ProductFilters>) => {
+    setCurrentPage(1);
+    setFilters((prev) => ({ ...prev, ...newFilters }));
+  }, []);
+
+  const goToPage = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const changeItemsPerPage = (newLimit: number) => {
+    setCurrentPage(1);
+    setItemsPerPage(newLimit);
+  };
+
+  const refreshData = useCallback(() => {
+    fetchData(filters, currentPage, itemsPerPage);
+  }, [fetchData, filters, currentPage, itemsPerPage]);
 
   const deleteProduct = async (id: string) => {
     try {
       await ProductsService.deleteProduct(id);
-      await fetchProducts(filters);
-      await fetchStatistics();
+      refreshData();
     } catch (err) {
       throw new Error("Error al eliminar el producto");
     }
   };
-
-  const updateFilters = useCallback(
-    (newFilters: ProductFilters) => {
-      setFilters((prevFilters) => {
-        const updatedFilters = { ...prevFilters, ...newFilters };
-        fetchProducts(updatedFilters);
-        fetchStatistics(updatedFilters);
-        return updatedFilters;
-      });
-    },
-    [fetchProducts, fetchStatistics]
-  );
-
-  const refreshData = useCallback(() => {
-    fetchProducts(filters);
-    fetchCategories();
-    fetchStatistics();
-  }, [fetchProducts, fetchCategories, fetchStatistics, filters]);
-
-  useEffect(() => {
-    const initialFilters = {};
-    fetchProducts();
-    fetchCategories();
-    fetchStatistics();
-  }, [fetchProducts, fetchCategories, fetchStatistics]);
 
   return {
     products,
@@ -95,5 +92,13 @@ export function useProducts() {
     updateFilters,
     deleteProduct,
     refreshData,
+    pagination: {
+      currentPage,
+      totalPages,
+      totalProducts,
+      itemsPerPage,
+      goToPage,
+      changeItemsPerPage,
+    },
   };
 }

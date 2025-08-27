@@ -52,8 +52,16 @@ export class ProductsService {
     return response.data;
   }
 
-  static async getStatistics(): Promise<ProductStats> {
-    const response = await api.get(`${this.BASE_PATH}/statistics`);
+  static async getStatistics(filters?: ProductFilters): Promise<ProductStats> {
+    const params = new URLSearchParams();
+    if (filters?.category) params.append("category", filters.category);
+    if (filters?.minPrice !== undefined)
+      params.append("minPrice", filters.minPrice.toString());
+    if (filters?.maxPrice !== undefined)
+      params.append("maxPrice", filters.maxPrice.toString());
+    if (filters?.search) params.append("search", filters.search);
+
+    const response = await api.get(`${this.BASE_PATH}/statistics?${params}`);
     return response.data;
   }
 }

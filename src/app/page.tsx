@@ -93,19 +93,18 @@ export default function HomePage() {
       <Header onCreateClick={handleCreate} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <StatsPanel statistics={statistics} loading={loading} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <CategoryChart statistics={statistics} type="doughnut" />
-          <CategoryChart statistics={statistics} type="bar" />
-        </div>
-
         <FilterBar
           categories={categories}
           filters={filters}
           onFiltersChange={updateFilters}
           totalResults={products.length}
         />
+        <StatsPanel statistics={statistics} loading={loading} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <CategoryChart statistics={statistics} type="doughnut" />
+          <CategoryChart statistics={statistics} type="bar" />
+        </div>
 
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <div className="flex items-center justify-between mb-6">

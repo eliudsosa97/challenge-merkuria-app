@@ -38,14 +38,17 @@ export function useProducts() {
     }
   }, []);
 
-  const fetchStatistics = useCallback(async () => {
-    try {
-      const data = await ProductsService.getStatistics();
-      setStatistics(data);
-    } catch (err) {
-      console.error("Error al cargar estadísticas:", err);
-    }
-  }, []);
+  const fetchStatistics = useCallback(
+    async (currentFilters: ProductFilters = {}) => {
+      try {
+        const data = await ProductsService.getStatistics(currentFilters);
+        setStatistics(data);
+      } catch (err) {
+        console.error("Error al cargar estadísticas:", err);
+      }
+    },
+    []
+  );
 
   const deleteProduct = async (id: string) => {
     try {
@@ -62,10 +65,11 @@ export function useProducts() {
       setFilters((prevFilters) => {
         const updatedFilters = { ...prevFilters, ...newFilters };
         fetchProducts(updatedFilters);
+        fetchStatistics(updatedFilters);
         return updatedFilters;
       });
     },
-    [fetchProducts]
+    [fetchProducts, fetchStatistics]
   );
 
   const refreshData = useCallback(() => {
@@ -75,6 +79,7 @@ export function useProducts() {
   }, [fetchProducts, fetchCategories, fetchStatistics, filters]);
 
   useEffect(() => {
+    const initialFilters = {};
     fetchProducts();
     fetchCategories();
     fetchStatistics();

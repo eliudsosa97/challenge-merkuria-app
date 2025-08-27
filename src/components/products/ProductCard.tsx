@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Edit, Trash2, Package, Star } from "lucide-react";
 import { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
@@ -9,21 +8,12 @@ import { Button } from "@/components/ui/Button";
 interface ProductCardProps {
   product: Product;
   onEdit: (product: Product) => void;
-  onDelete: (id: string) => void;
+  onDelete: (product: Product) => void;
 }
 
 export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
-
   const handleDelete = async () => {
-    if (window.confirm(`¿Estás seguro de eliminar "${product.name}"?`)) {
-      setIsDeleting(true);
-      try {
-        await onDelete(product.id);
-      } finally {
-        setIsDeleting(false);
-      }
-    }
+    onDelete(product);
   };
 
   const renderStars = (rating: number) => {
@@ -78,7 +68,6 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
             </button>
             <button
               onClick={handleDelete}
-              disabled={isDeleting}
               className="p-1 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50"
               title="Eliminar"
             >
@@ -135,11 +124,10 @@ export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
             variant="danger"
             size="sm"
             onClick={handleDelete}
-            disabled={isDeleting}
             className="flex-1"
           >
             <Trash2 className="w-4 h-4 mr-1" />
-            {isDeleting ? "Eliminando..." : "Eliminar"}
+            Eliminar
           </Button>
         </div>
       </div>

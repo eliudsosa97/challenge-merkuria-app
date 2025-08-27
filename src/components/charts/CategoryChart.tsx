@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +9,7 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  TooltipItem,
 } from "chart.js";
 import { Bar, Doughnut } from "react-chartjs-2";
 import { ProductStats } from "@/lib/types";
@@ -106,9 +106,12 @@ export function CategoryChart({
       },
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function (context: TooltipItem<"bar">) {
             const total = statistics!.totalProducts;
-            const percentage = ((context.raw / total) * 100).toFixed(1);
+            const percentage = (
+              ((context.raw as number) / total) *
+              100
+            ).toFixed(1);
             return `${context.raw} productos (${percentage}%)`;
           },
         },
@@ -156,9 +159,9 @@ export function CategoryChart({
       },
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function (context: TooltipItem<"doughnut">) {
             const percentage = (
-              (context.raw / statistics!.totalProducts) *
+              ((context.raw as number) / statistics!.totalProducts) *
               100
             ).toFixed(1);
             return `${context.label}: ${context.raw} productos (${percentage}%)`;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, Filter, X, SortAsc, SortDesc } from "lucide-react";
+import { Search, Filter, X } from "lucide-react";
 import { ProductFilters } from "@/lib/types";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -25,7 +25,8 @@ export function FilterBar({
   const [showFilters, setShowFilters] = useState(false);
 
   const debouncedSearch = useCallback(
-    debounce((value: string) => {
+    debounce((...args: unknown[]) => {
+      const value = args[0] as string;
       onFiltersChange({ search: value || undefined });
     }, 300),
     [onFiltersChange]
@@ -201,7 +202,7 @@ export function FilterBar({
             )}
             {filters.search && (
               <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
-                "{filters.search}"
+                &quot;{filters.search}&quot;
               </span>
             )}
           </div>

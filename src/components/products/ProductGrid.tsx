@@ -8,7 +8,7 @@ interface ProductGridProps {
   products: Product[];
   loading: boolean;
   onEdit: (product: Product) => void;
-  onDelete: (id: string) => Promise<void>;
+  onDelete: (product: Product) => Promise<void>;
 }
 
 export function ProductGrid({
@@ -61,11 +61,16 @@ export function ProductGrid({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {products.map((product) => (
-        <div key={product.id} className="group">
-          <ProductCard product={product} onEdit={onEdit} onDelete={onDelete} />
-        </div>
-      ))}
+      {Array.isArray(products) &&
+        products.map((product) => (
+          <div key={product.id} className="group">
+            <ProductCard
+              product={product}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          </div>
+        ))}
     </div>
   );
 }

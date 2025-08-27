@@ -37,8 +37,9 @@ export default function HomePage() {
     setShowCreateForm(true);
   };
 
-  const handleDeleteRequest = (product: Product) => {
+  const handleDeleteRequest = async (product: Product): Promise<void> => {
     setDeletingProduct(product);
+    return Promise.resolve();
   };
 
   const handleDeleteConfirm = async (id: string) => {
@@ -59,13 +60,6 @@ export default function HomePage() {
         ? "Producto actualizado exitosamente"
         : "Producto creado exitosamente"
     );
-  };
-
-  const handleDeleteFromGrid = async (id: string) => {
-    const product = products.find((p) => p.id === id);
-    if (product) {
-      handleDeleteRequest(product);
-    }
   };
 
   if (error) {
@@ -130,16 +124,17 @@ export default function HomePage() {
             products={products}
             loading={loading}
             onEdit={handleEdit}
-            onDelete={handleDeleteFromGrid}
+            onDelete={handleDeleteRequest}
           />
         </div>
 
         {!loading && (
           <div className="text-center py-4">
             <p className="text-sm text-gray-500">
-              🟢 Conectado al backend NestJS • Última actualización:{" "}
+              🟢 Conectado • Última actualización:{" "}
               {new Date().toLocaleTimeString()}
             </p>
+            <p>Desarrollado por Eliud Sosa. 2025</p>
           </div>
         )}
       </main>

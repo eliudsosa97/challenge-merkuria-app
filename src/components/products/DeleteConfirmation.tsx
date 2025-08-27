@@ -84,7 +84,7 @@ export function DeleteConfirmation({
                 <div className="flex justify-between">
                   <span className="font-medium text-gray-700">Precio:</span>
                   <span className="text-gray-900">
-                    ${product.price.toFixed(2)}
+                    ${Number(product.price).toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between">

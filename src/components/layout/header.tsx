@@ -1,7 +1,5 @@
 "use client";
 
-import { Package } from "lucide-react";
-
 interface HeaderProps {
   onCreateClick: () => void;
 }
@@ -12,12 +10,11 @@ export function Header({ onCreateClick }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
-            <Package className="h-8 w-8 text-blue-600" />
             <div>
               <h1 className="text-xl font-bold text-gray-900">
-                Gestión de Productos
+                Challenge - Productos
               </h1>
-              <p className="text-sm text-gray-500">Tienda para Mascotas</p>
+              <p className="text-sm text-gray-500">Productos para Mascotas</p>
             </div>
           </div>
 

@@ -41,9 +41,12 @@ export function StatsPanel({ statistics, loading }: StatsPanelProps) {
     );
   }
 
-  const topCategory = statistics.byCategory.reduce((prev, current) =>
-    prev.count > current.count ? prev : current
-  );
+  const topCategory =
+    statistics.byCategory.length > 0
+      ? statistics.byCategory.reduce((prev, current) =>
+          prev.count > current.count ? prev : current
+        )
+      : { category: "N/A", count: 0 };
 
   const stats = [
     {
@@ -110,7 +113,7 @@ export function StatsPanel({ statistics, loading }: StatsPanelProps) {
           Distribución por Categorías
         </h3>
         <div className="space-y-3">
-          {statistics.byCategory
+          {...statistics.byCategory
             .sort((a, b) => b.count - a.count)
             .map((category, index) => (
               <div

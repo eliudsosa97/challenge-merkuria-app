@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/layout/header";
-import { ProductGrid } from "@/components/products/product-grid";
-import { FilterBar } from "@/components/products/filter-bar";
-import { StatsPanel } from "@/components/products/stats-panel";
+import { Header } from "@/components/layout/Header";
+import { ProductGrid } from "@/components/products/ProductGrid";
+import { FilterBar } from "@/components/products/FilterBar";
+import { StatsPanel } from "@/components/products/StatsPanel";
 import { useProducts } from "@/hooks/useProducts";
 import { Product } from "@/lib/types";
 

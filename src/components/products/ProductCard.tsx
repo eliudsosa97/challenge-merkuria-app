@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Edit, Trash2, Package, Star } from "lucide-react";
 import { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 interface ProductCardProps {
   product: Product;

@@ -3,9 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { Search, Filter, X, SortAsc, SortDesc } from "lucide-react";
 import { ProductFilters } from "@/lib/types";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Button } from "@/components/ui/Button";
 import { debounce } from "@/lib/utils";
 
 interface FilterBarProps {

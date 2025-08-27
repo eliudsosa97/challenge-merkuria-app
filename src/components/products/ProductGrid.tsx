@@ -1,7 +1,7 @@
 "use client";
 
 import { Product } from "@/lib/types";
-import { ProductCard } from "./product-card";
+import { ProductCard } from "./ProductCard";
 import { Package } from "lucide-react";
 
 interface ProductGridProps {

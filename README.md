@@ -2,7 +2,7 @@
 
 Aplicación de Gestión de Productos para el reto técnico de Merkur.ia (Frontend). Permite listar, crear, editar, eliminar y filtrar productos; incluye paginación, ordenamiento, estadísticas básicas y gráficas dinámicas.
 
-Producción: reemplaza con la URL desplegada de la app (Vercel/Netlify).
+Producción: https://challenge-merkuria-app-qnov-one.vercel.app/
 
 ### Stack
 
@@ -38,7 +38,7 @@ Producción: reemplaza con la URL desplegada de la app (Vercel/Netlify).
 1. Clonar e instalar dependencias
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/eliudsosa97/challenge-merkuria-app.git
 cd challenge-merkuria-app
 npm install
 ```
@@ -215,26 +215,37 @@ Recomendado: Vercel
 
 1. Importa el repositorio en Vercel
 2. Variables de entorno en el proyecto (Producción/Preview):
-   - `NEXT_PUBLIC_API_URL` apuntando a tu backend desplegado (ej. `https://api.tuapp.com/api`)
+   - `NEXT_PUBLIC_API_URL` apuntando a tu backend desplegado (ej. `https://challenge-merkuria-api-215ba9385fca.herokuapp.com/api/`)
 3. Despliega. Verifica CORS en el backend para el dominio de Vercel.
 
 ---
 
 ## Uso de asistentes de IA (ejemplos)
 
-Durante el desarrollo se emplearon asistentes de IA para acelerar tareas:
+Durante el desarrollo se emplearon asistentes de IA de forma responsable para acelerar tareas puntuales. Siempre con revisión y ajustes manuales.
 
-- Generación de esqueletos de componentes y tipados (TS/React)
-- Propuestas de pruebas unitarias y casos borde
-- Redacción de este README y guías de ejecución
+- Gemini Pro (chat)
 
-Ejemplos de prompts utilizados:
+  - Uso: resolver dudas variadas, explicar mensajes de error/stack traces y validar enfoques.
+  - Ejemplos de prompts:
+    - “Lee este stack trace de Next.js y dime la causa probable y el fix mínimo.”
+    - “¿Qué implica este warning de React 19 y cómo mitigarlo?”
+    - “¿Ves algún riesgo en este flujo de filtros y paginación?”
 
-- “Crea un formulario con React Hook Form y Zod para Producto con name/category/price”.
-- “Escribe pruebas de filtrado y paginación para el grid de productos”.
-- “Documenta los endpoints usados por el frontend con ejemplos de query params”.
+- Copilot con GPT-5 (en el editor)
+  - Uso: completaciones de código, fixes sencillos de bugs, creación de tests (Vitest/Testing Library) y generación de comentarios en algunas ocasiones.
+  - Ejemplos de prompts/completaciones:
+    - “Completa pruebas para ProductGrid con paginación y estado loading.”
+    - “Sugiere un refactor pequeño para este hook evitando renders extra.”
+    - “Agrega comentarios JSDoc a este servicio de productos.”
 
-Todas las salidas fueron revisadas y ajustadas manualmente.
+Otras tareas asistidas:
+
+- Generación de esqueletos de componentes, tipados y utilidades.
+- Borrador de este README y guías de ejecución, luego ajustado manualmente.
+
+Todo con revisión humana.
+Todas las salidas de IA se verificaron con linters, pruebas y pruebas manuales antes de integrarlas.
 
 ---
 

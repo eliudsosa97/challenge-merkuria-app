@@ -34,9 +34,14 @@ export function FilterBar({
     [onFiltersChange]
   );
 
+  const [initialized, setInitialized] = useState(false);
   useEffect(() => {
+    if (!initialized) {
+      setInitialized(true);
+      return;
+    }
     debouncedSearch(localSearch);
-  }, [localSearch, debouncedSearch]);
+  }, [localSearch, debouncedSearch, initialized]);
 
   const handleCategoryChange = (category: string) => {
     onFiltersChange({

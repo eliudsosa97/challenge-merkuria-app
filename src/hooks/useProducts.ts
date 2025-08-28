@@ -29,6 +29,8 @@ export function useProducts() {
       maxPrice: params.get("maxPrice")
         ? Number(params.get("maxPrice"))
         : undefined,
+      sortBy: (params.get("sortBy") as "name" | "price") || undefined,
+      sortOrder: (params.get("sortOrder") as "ASC" | "DESC") || undefined,
     };
   });
 
@@ -72,6 +74,8 @@ export function useProducts() {
     if (filters.search) params.set("search", filters.search);
     if (filters.minPrice) params.set("minPrice", String(filters.minPrice));
     if (filters.maxPrice) params.set("maxPrice", String(filters.maxPrice));
+    if (filters.sortBy) params.set("sortBy", filters.sortBy);
+    if (filters.sortOrder) params.set("sortOrder", filters.sortOrder);
     if (currentPage > 1) params.set("page", String(currentPage));
     if (itemsPerPage !== ITEMS_PER_PAGE)
       params.set("limit", String(itemsPerPage));
@@ -85,9 +89,22 @@ export function useProducts() {
     ProductsService.getCategories().then(setCategories).catch(console.error);
   }, []);
 
-  const updateFilters = useCallback((newFilters: Partial<ProductFilters>) => {
-    setCurrentPage(1);
-    setFilters((prev) => ({ ...prev, ...newFilters }));
+  const updateFilters = useCallback((patch: Partial<ProductFilters>) => {
+    setFilters((prev) => {
+      const next: ProductFilters = { ...prev, ...patch };
+      const equal =
+        prev.category === next.category &&
+        prev.search === next.search &&
+        prev.minPrice === next.minPrice &&
+        prev.maxPrice === next.maxPrice &&
+        prev.sortBy === next.sortBy &&
+        prev.sortOrder === next.sortOrder;
+
+      if (!equal) {
+        setCurrentPage(1);
+      }
+      return next;
+    });
   }, []);
 
   const clearFilters = useCallback(() => {
